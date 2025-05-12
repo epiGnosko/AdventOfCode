@@ -1,20 +1,17 @@
 def connect():
     global cost
-    min = graph["Tristram"]["AlphaCentauri"]
-    city1 = "Tristram"
-    city2 = "AlphaCentauri"
-    for i in graph:
-        for j in graph[i]:
-            if i != j and min > graph[i][j]:
-                city1 = i
-                city2 = j 
-                min = graph[i][j]
-    if cities[city1] + cities[city2] < 2:
-        print(city1 + " to " + city2 + " takes", graph[city1][city2])
-        cities[city1] += 1
-        cities[city2] += 1
-        cost += min 
-    del graph[city1][city2]
+    min = graph[connections[0][0]][connections[1][0]]
+    city1 = connections[0][0]
+    city2 = connections[1][0]
+    for i in range(len(connections)-1):
+        for j in range(i+1, len(connections)):
+            ends1 = (connections[i][0], connections[i][-1])
+            ends2 = (connections[j][0], connections[j][-1])
+            for k in ends1:
+                for l in ends2:
+                    if min > graph[k][l]:
+                        min = graph[k][l]
+
 
 def fill_values(x:str):
     processed = x.split(" = ")
@@ -39,24 +36,14 @@ cities = {
     "Arbre": 0,
 }
 
+connections = [[x] for x in cities]
+
 graph = {}
 cost = 0
 for i in input:
     fill_values(i)
 
-for i in graph:
-    print(i ,"-> ", graph[i])
-
-while True:
-    ones = 0
-    twos = 0
-    for i in cities:
-        if cities[i] == 1:
-            ones += 1
-        if cities[i] == 2:
-            twos += 1
-    if ones == 2 and twos == 6:
-        break
+while len(connections) > 1:
     connect()
 
 print(cost)

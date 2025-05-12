@@ -1,64 +1,21 @@
-def connect():
-    global cost
-    max = graph["Tristram"]["AlphaCentauri"]
-    city1 = "Tristram"
-    city2 = "AlphaCentauri"
-    for i in cities:
-        for j in cities:
-            if i != j and max < graph[i][j]:
-                city1 = i
-                city2 = j 
-                max = graph[i][j]
-    if cities[city1] + cities[city2] < 2:
-        print(city1 + " to " + city2 + " takes", graph[city1][city2])
-        cities[city1] += 1
-        cities[city2] += 1
-        cost += max 
-    graph[city1][city2] = 0
-    graph[city2][city1] = 0
+import sys
+from itertools import permutations
 
-def fill_values(x:str):
-    processed = x.split(" = ")
-    city1, city2 = processed[0].split(" to ")
-    if city1 not in graph:
-        graph[city1] = {}
-    if city2 not in graph:
-        graph[city2] = {}
-    graph[city1][city2] = int(processed[1])
-    graph[city2][city1] = int(processed[1])
+places = set()
+distances = dict()
+for line in open('input.txt'):
+    (source, _, dest, _, distance) = line.split()
+    places.add(source)
+    places.add(dest)
+    distances.setdefault(source, dict())[dest] = int(distance)
+    distances.setdefault(dest, dict())[source] = int(distance)
 
-with open("input.txt","r") as f:
-    input = f.readlines()
+shortest = sys.maxsize
+longest = 0
+for items in permutations(places):
+    dist = sum(map(lambda x, y: distances[x][y], items[:-1], items[1:]))
+    shortest = min(shortest, dist)
+    longest = max(longest, dist)
 
-cities = {
-    "Tristram" : 0,
-    "AlphaCentauri" : 0,
-    "Snowdin": 0,
-    "Tambi": 0,
-    "Faerun": 0,
-    "Norrath": 0,
-    "Straylight":0,
-    "Arbre": 0,
-}
-
-graph = {}
-cost = 0
-for i in input:
-    fill_values(i)
-
-for i in graph:
-    print(i ,"-> ", graph[i])
-
-while True:
-    ones = 0
-    twos = 0
-    for i in cities:
-        if cities[i] == 1:
-            ones += 1
-        if cities[i] == 2:
-            twos += 1
-    if ones == 2 and twos == 6:
-        break
-    connect()
-
-print(cost)
+print("shortest: %d" % (shortest))
+print("longest: %d" % (longest))
