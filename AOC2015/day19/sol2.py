@@ -15,21 +15,21 @@
 #                 queue.append((neighbor, steps + 1))
 #     return -1
 
-def determine_smallest_distance(molecule):
+def determine_smallest_distance(molecule, steps = 0):
     global transformations
 
     if molecule == 'e':
+        print(steps)
         return 0
 
     possible_shiftings = shiftings(molecule)
 
     min_cost_next = 999999999
     for x in possible_shiftings:
-        cost_next = determine_smallest_distance(x)
+        cost_next = determine_smallest_distance(x, steps + 1)
         if cost_next < min_cost_next:
             min_cost_next = cost_next
 
-    print(1 + min_cost_next)
     return 1 + min_cost_next
 
 def shiftings(molecule):
