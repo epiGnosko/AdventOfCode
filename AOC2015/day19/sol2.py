@@ -1,19 +1,4 @@
-# from collections import deque
-#
-# def find_min_steps(start_molecule):
-#     visited = set()
-#     queue = deque([(start_molecule, 0)])
-#
-#     while queue:
-#         current, steps = queue.popleft()
-#         print(current, steps)
-#         if current == 'e':
-#             return steps
-#         for neighbor in shiftings(current):
-#             if neighbor not in visited:
-#                 visited.add(neighbor)
-#                 queue.append((neighbor, steps + 1))
-#     return -1
+# Kinda cheating, you get the optimum path without complete execution
 
 def determine_smallest_distance(molecule, steps = 0):
     global transformations
